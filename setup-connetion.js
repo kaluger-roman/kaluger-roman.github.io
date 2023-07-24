@@ -1,18 +1,9 @@
 import { tunnelsHosts } from "./tunnel-hosts.js";
 
 const fetchHost = async () => {
-  const res = await fetch(tunnelsHosts.tunnels[tunnelsHosts.clientHost], {
-    method: "GET",
-    headers: {
-      "ngrok-skip-browser-warning": true,
-    },
-  });
-  const blob = await res.blob();
-  const urlObject = URL.createObjectURL(blob);
-
   const frame = document.querySelector("iframe");
 
-  frame.setAttribute("src", urlObject);
+  frame.setAttribute("src", tunnelsHosts.tunnels[tunnelsHosts.clientHost]);
 
   frame.onload = () => {
     frame?.contentWindow.postMessage(
