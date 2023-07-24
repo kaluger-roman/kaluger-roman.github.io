@@ -1,4 +1,4 @@
-import tunnelsHosts from "./tunnel-hosts.json";
+import { tunnelsHosts } from "./tunnel-hosts";
 
 const fetchHost = async () => {
   const res = await fetch(tunnelsHosts.tunnels[tunnelsHosts.clientHost], {
