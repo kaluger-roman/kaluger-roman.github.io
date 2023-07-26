@@ -1,0 +1,157 @@
+version: "0.1.0"
+
+name: kaluger-projects
+services:
+  authorization-client:
+    volumes:
+      - type: bind
+        source: ../authorization-client
+        target: /app
+      - type: volume
+        source: authorization-client-node-modules
+        target: /app/node_modules       
+    build:
+      ../authorization-client
+    ports:
+      - 3021:3021
+    depends_on:
+      - authorization-server
+    networks:
+      - kaluger-projects
+      
+  authorization-server:
+    volumes:
+      - type: bind
+        source: ../authorization-server
+        target: /app
+      - type: volume
+        source: authorization-server-node-modules
+        target: /app/node_modules       
+    build:
+      ../authorization-server
+    ports:
+      - 3022:3000
+    depends_on:
+      - authorization-postgres
+    networks:
+      - kaluger-projects
+
+  authorization-postgres:
+    image: postgres:14.8-alpine
+    environment:
+      POSTGRES_DB: ${AUTHORIZATION_POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - authorization-postgres:/var/lib/postgresql/data/pgdata
+    ports:
+      - 3023:5432
+    networks:
+      - kaluger-projects
+
+  sound-english-client:
+    volumes:
+      - type: bind
+        source: ../sound-english-client
+        target: /app
+      - type: volume
+        source: sound-english-client-node-modules
+        target: /app/node_modules       
+    build:
+      ../sound-english-client
+    ports:
+      - 3024:3024
+    depends_on:
+      - sound-english-server
+    networks:
+      - kaluger-projects
+
+  sound-english-server:
+    volumes:
+      - type: bind
+        source: ../sound-english-server
+        target: /app
+      - type: volume
+        source: sound-english-server-node-modules
+        target: /app/node_modules       
+      - type: volume
+        source: sound-english-server-audios
+        target: /app/audios       
+    build:
+      ../sound-english-server
+    ports:
+      - 3025:3000
+    depends_on:
+      - sound-english-postgres
+    networks:
+      - kaluger-projects
+
+  sound-english-postgres:
+    image: postgres:14.8-alpine
+    environment:
+      POSTGRES_DB: ${SOUND_ENGLISH_POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - sound-english-postgres:/var/lib/postgresql/data/pgdata
+    ports:
+      - 3026:5432
+    networks:
+      - kaluger-projects
+
+  text-to-speech-english:
+    image: synesthesiam/opentts:en
+    ports:
+      - 3027:5500
+    networks:
+      - kaluger-projects
+
+  text-to-speech-russian:
+    image: synesthesiam/opentts:ru
+    ports:
+      - 3028:5500
+    networks:
+      - kaluger-projects
+  
+  ffmpeg-server:
+    volumes:
+      - type: bind
+        source: ../ffmpeg-server
+        target: /app
+      - type: volume
+        source: ffmpeg-server-node-modules
+        target: /app/node_modules       
+      - type: volume
+        source: sound-english-server-audios
+        target: /app/audios       
+    build:
+      ../ffmpeg-server
+    ports:
+      - 3029:3000
+    networks:
+      - kaluger-projects
+
+  nginx-router-proxy:
+    build:
+      context: .
+      dockerfile: nginx.proxy.dockerfile
+    ports:
+      - 3030:80
+    networks:
+      - kaluger-projects
+
+volumes:
+  authorization-postgres:
+  sound-english-postgres:
+  authorization-client-node-modules:
+  authorization-server-node-modules:
+  sound-english-server-audios:
+  sound-english-server-node-modules:
+  sound-english-client-node-modules:
+  ffmpeg-server-node-modules:
+
+networks:
+  kaluger-projects:
+    driver: bridge
