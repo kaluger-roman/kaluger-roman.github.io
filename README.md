@@ -7,11 +7,11 @@
 - В environment папке
 
 - для authorization-сlient
-  REACT_APP_SERVER_HOST=<url>/authorization-server
+  REACT_APP_SERVER_HOST=wss://<url>/authorization-server
 
 - для sound-english-client
-  REACT_APP_AUTH_HOST=<url>/authorization-server
-  REACT_APP_SERVER_HOST=<url>/sound-english-server
+  REACT_APP_AUTH_HOST=wss://<url>/authorization-server
+  REACT_APP_SERVER_HOST=wss://<url>/sound-english-server
 
 - git push
 - docker compose up
