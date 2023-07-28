@@ -3,15 +3,17 @@ version: "0.1.0"
 name: kaluger-projects
 services:
   authorization-client:
+    env_file:
+      - ./environment/authorization-client.env
     volumes:
       - type: bind
-        source: ../authorization-client
+        source: ../../authorization-client
         target: /app
       - type: volume
         source: authorization-client-node-modules
         target: /app/node_modules       
     build:
-      ../authorization-client
+      ../../authorization-client
     ports:
       - 3021:3021
     depends_on:
@@ -20,15 +22,17 @@ services:
       - kaluger-projects
       
   authorization-server:
+    env_file:
+      - ./environment/authorization-server.env
     volumes:
       - type: bind
-        source: ../authorization-server
+        source: ../../authorization-server
         target: /app
       - type: volume
         source: authorization-server-node-modules
         target: /app/node_modules       
     build:
-      ../authorization-server
+      ../../authorization-server
     ports:
       - 3022:3000
     depends_on:
@@ -37,11 +41,11 @@ services:
       - kaluger-projects
 
   authorization-postgres:
+    env_file:
+      - ./environment/db.env
     image: postgres:14.8-alpine
     environment:
-      POSTGRES_DB: ${AUTHORIZATION_POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: authorization
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - authorization-postgres:/var/lib/postgresql/data/pgdata
@@ -51,15 +55,17 @@ services:
       - kaluger-projects
 
   sound-english-client:
+    env_file:
+      - ./environment/sound-english-client.env
     volumes:
       - type: bind
-        source: ../sound-english-client
+        source: ../../sound-english-client
         target: /app
       - type: volume
         source: sound-english-client-node-modules
         target: /app/node_modules       
     build:
-      ../sound-english-client
+      ../../sound-english-client
     ports:
       - 3024:3024
     depends_on:
@@ -68,9 +74,11 @@ services:
       - kaluger-projects
 
   sound-english-server:
+    env_file:
+      - ./environment/sound-english-server.env
     volumes:
       - type: bind
-        source: ../sound-english-server
+        source: ../../sound-english-server
         target: /app
       - type: volume
         source: sound-english-server-node-modules
@@ -79,7 +87,7 @@ services:
         source: sound-english-server-audios
         target: /app/audios       
     build:
-      ../sound-english-server
+      ../../sound-english-server
     ports:
       - 3025:3000
     depends_on:
@@ -88,11 +96,11 @@ services:
       - kaluger-projects
 
   sound-english-postgres:
+    env_file:
+      - ./environment/db.env
     image: postgres:14.8-alpine
     environment:
-      POSTGRES_DB: ${SOUND_ENGLISH_POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: sound-english
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - sound-english-postgres:/var/lib/postgresql/data/pgdata
@@ -116,9 +124,11 @@ services:
       - kaluger-projects
   
   ffmpeg-server:
+    env_file:
+      - ./environment/ffmpeg-server.env
     volumes:
       - type: bind
-        source: ../ffmpeg-server
+        source: ../../ffmpeg-server
         target: /app
       - type: volume
         source: ffmpeg-server-node-modules
@@ -127,18 +137,21 @@ services:
         source: sound-english-server-audios
         target: /app/audios       
     build:
-      ../ffmpeg-server
+      ../../ffmpeg-server
     ports:
       - 3029:3000
     networks:
       - kaluger-projects
 
   nginx-router-proxy:
-    build:
-      context: .
-      dockerfile: nginx.proxy.dockerfile
+    build: ./nginx
     ports:
       - 3030:80
+    depends_on:
+      - authorization-server
+      - authorization-client
+      - sound-english-server
+      - sound-english-client
     networks:
       - kaluger-projects
 
