@@ -8,13 +8,13 @@
     <style>
         iframe {
             width: 100vw;
-            min-height: 100vh;
+            height: var("--app-height");
             height: max-content;
-            border-width: 0;
             position: absolute;
             z-index: 1;
             top: 0px;
             left: 0px;
+            border: "none";
         }
 
         body,
@@ -27,6 +27,14 @@
             box-sizing: border-box;
         }
     </style>
+    <script>
+        const appHeight = () => {
+            const doc = document.documentElement
+            doc.style.setProperty("--app-height", `${window.innerHeight}px`)
+        }
+        window.addEventListener("resize", appHeight)
+        appHeight()
+    </script>
 </head>
 
 <body>
