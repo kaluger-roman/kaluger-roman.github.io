@@ -1,0 +1,137 @@
+version: "0.1.0"
+
+name: kaluger-projects-prod
+services:
+  authorization-client:
+    env_file:
+      - ./environment/authorization-client.env
+    build:
+      context: https://github.com/kaluger-roman/authorization-client.git
+      dockerfile: Dockerfile.prod
+    ports:
+      - 3021:3021
+    depends_on:
+      - authorization-server
+    networks:
+      - kaluger-projects-prod
+      
+  authorization-server:
+    env_file:
+      - ./environment/authorization-server.env 
+    build:
+      context: https://github.com/kaluger-roman/authorization-server.git
+      dockerfile: Dockerfile.prod
+    ports:
+      - 3022:3000
+    depends_on:
+      - authorization-postgres
+    networks:
+      - kaluger-projects-prod
+
+  authorization-postgres:
+    env_file:
+      - ./environment/db.env
+    image: postgres:14.8-alpine
+    environment:
+      POSTGRES_DB: authorization
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - authorization-postgres:/var/lib/postgresql/data/pgdata
+    ports:
+      - 3023:5432
+    networks:
+      - kaluger-projects-prod
+
+  sound-english-client:
+    env_file:
+      - ./environment/sound-english-client.env  
+    build:
+      context: https://github.com/kaluger-roman/sound-english-client.git
+      dockerfile: Dockerfile.prod
+    ports:
+      - 3024:3024
+    depends_on:
+      - sound-english-server
+    networks:
+      - kaluger-projects-prod
+
+  sound-english-server:
+    env_file:
+      - ./environment/sound-english-server.env
+    volumes:
+      - type: volume
+        source: sound-english-server-audios
+        target: /app/audios       
+    build:
+      context: https://github.com/kaluger-roman/sound-english-server.git
+      dockerfile: Dockerfile.prod
+    ports:
+      - 3025:3000
+    depends_on:
+      - sound-english-postgres
+    networks:
+      - kaluger-projects-prod
+
+  sound-english-postgres:
+    env_file:
+      - ./environment/db.env
+    image: postgres:14.8-alpine
+    environment:
+      POSTGRES_DB: sound-english
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - sound-english-postgres:/var/lib/postgresql/data/pgdata
+    ports:
+      - 3026:5432
+    networks:
+      - kaluger-projects-prod
+
+  text-to-speech-english:
+    image: synesthesiam/opentts:en
+    ports:
+      - 3027:5500
+    networks:
+      - kaluger-projects-prod
+
+  text-to-speech-russian:
+    image: synesthesiam/opentts:ru
+    ports:
+      - 3028:5500
+    networks:
+      - kaluger-projects-prod
+  
+  ffmpeg-server:
+    env_file:
+      - ./environment/ffmpeg-server.env
+    volumes:
+      - type: volume
+        source: sound-english-server-audios
+        target: /app/audios       
+    build:
+      context: https://github.com/kaluger-roman/ffmpeg-server.git
+      dockerfile: Dockerfile.prod
+    ports:
+      - 3029:3000
+    networks:
+      - kaluger-projects-prod
+
+  nginx-router-proxy:
+    build: ./nginx
+    ports:
+      - 3030:80
+    depends_on:
+      - authorization-server
+      - authorization-client
+      - sound-english-server
+      - sound-english-client
+    networks:
+      - kaluger-projects-prod
+
+volumes:
+  authorization-postgres:
+  sound-english-postgres:
+  sound-english-server-audios:
+
+networks:
+  kaluger-projects-prod:
+    driver: bridge
