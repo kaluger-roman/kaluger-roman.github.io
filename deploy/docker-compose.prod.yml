@@ -6,7 +6,7 @@ services:
     env_file:
       - ./environment/authorization-client.env
     build:
-      context: https://github.com/kaluger-roman/authorization-client.git
+      context:  ../../authorization-client
       dockerfile: Dockerfile.prod
     ports:
       - 3021:3021
@@ -19,7 +19,7 @@ services:
     env_file:
       - ./environment/authorization-server.env 
     build:
-      context: https://github.com/kaluger-roman/authorization-server.git
+      context: ../../authorization-server
       dockerfile: Dockerfile.prod
     ports:
       - 3022:3000
@@ -46,7 +46,7 @@ services:
     env_file:
       - ./environment/sound-english-client.env  
     build:
-      context: https://github.com/kaluger-roman/sound-english-client.git
+      context: ../../sound-english-client
       dockerfile: Dockerfile.prod
     ports:
       - 3024:3024
@@ -63,7 +63,7 @@ services:
         source: sound-english-server-audios
         target: /app/audios       
     build:
-      context: https://github.com/kaluger-roman/sound-english-server.git
+      context: ../../sound-english-server
       dockerfile: Dockerfile.prod
     ports:
       - 3025:3000
@@ -108,7 +108,7 @@ services:
         source: sound-english-server-audios
         target: /app/audios       
     build:
-      context: https://github.com/kaluger-roman/ffmpeg-server.git
+      context: ../../ffmpeg-server
       dockerfile: Dockerfile.prod
     ports:
       - 3029:3000
