@@ -34,7 +34,7 @@ services:
     build:
       ../../authorization-server
     ports:
-      - 3022:3000
+      - 3022:3022
     depends_on:
       - authorization-postgres
     networks:
@@ -89,7 +89,7 @@ services:
     build:
       ../../sound-english-server
     ports:
-      - 3025:3000
+      - 3025:3025
     depends_on:
       - sound-english-postgres
     networks:
@@ -140,18 +140,6 @@ services:
       ../../ffmpeg-server
     ports:
       - 3029:3000
-    networks:
-      - kaluger-projects
-
-  nginx-router-proxy:
-    build: ./nginx
-    ports:
-      - 3030:80
-    depends_on:
-      - authorization-server
-      - authorization-client
-      - sound-english-server
-      - sound-english-client
     networks:
       - kaluger-projects
 

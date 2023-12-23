@@ -6,8 +6,9 @@ services:
     env_file:
       - ./environment/authorization-client.env
     build:
-      context:  ../../authorization-client
+      context:  https://github.com/kaluger-roman/authorization-client.git
       dockerfile: Dockerfile.prod
+      target: nginxrunner
     ports:
       - 3021:3021
     depends_on:
@@ -19,7 +20,7 @@ services:
     env_file:
       - ./environment/authorization-server.env 
     build:
-      context: ../../authorization-server
+      context: https://github.com/kaluger-roman/authorization-server.git
       dockerfile: Dockerfile.prod
     ports:
       - 3022:3000
@@ -46,8 +47,9 @@ services:
     env_file:
       - ./environment/sound-english-client.env  
     build:
-      context: ../../sound-english-client
+      context: https://github.com/kaluger-roman/sound-english-client.git
       dockerfile: Dockerfile.prod
+      target: nginxrunner 
     ports:
       - 3024:3024
     depends_on:
@@ -63,7 +65,7 @@ services:
         source: sound-english-server-audios
         target: /app/audios       
     build:
-      context: ../../sound-english-server
+      context: https://github.com/kaluger-roman/sound-english-server.git
       dockerfile: Dockerfile.prod
     ports:
       - 3025:3000
@@ -108,22 +110,10 @@ services:
         source: sound-english-server-audios
         target: /app/audios       
     build:
-      context: ../../ffmpeg-server
+      context: https://github.com/kaluger-roman/ffmpeg-server.git
       dockerfile: Dockerfile.prod
     ports:
       - 3029:3000
-    networks:
-      - kaluger-projects-prod
-
-  nginx-router-proxy:
-    build: ./nginx
-    ports:
-      - 3030:80
-    depends_on:
-      - authorization-server
-      - authorization-client
-      - sound-english-server
-      - sound-english-client
     networks:
       - kaluger-projects-prod
 
