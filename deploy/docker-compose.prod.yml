@@ -8,9 +8,10 @@ services:
     build:
       context:  https://github.com/kaluger-roman/authorization-client.git
       dockerfile: Dockerfile.prod
-      target: nginxrunner
+      args: 
+        - REACT_APP_SERVER_HOST=ws://${HOST}:3022/api
     ports:
-      - 3021:3021
+      - 3021:3000
     depends_on:
       - authorization-server
     networks:
@@ -23,7 +24,7 @@ services:
       context: https://github.com/kaluger-roman/authorization-server.git
       dockerfile: Dockerfile.prod
     ports:
-      - 3022:3000
+      - 3022:3022
     depends_on:
       - authorization-postgres
     networks:
@@ -49,9 +50,11 @@ services:
     build:
       context: https://github.com/kaluger-roman/sound-english-client.git
       dockerfile: Dockerfile.prod
-      target: nginxrunner 
+      args: 
+        - REACT_APP_SERVER_HOST=ws://${HOST}:3025/api
+        - REACT_APP_AUTH_HOST=http://${HOST}:3021
     ports:
-      - 3024:3024
+      - 3024:3000
     depends_on:
       - sound-english-server
     networks:
@@ -68,7 +71,7 @@ services:
       context: https://github.com/kaluger-roman/sound-english-server.git
       dockerfile: Dockerfile.prod
     ports:
-      - 3025:3000
+      - 3025:3025
     depends_on:
       - sound-english-postgres
     networks:
