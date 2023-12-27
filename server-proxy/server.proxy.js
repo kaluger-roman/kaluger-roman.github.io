@@ -3,15 +3,15 @@ const app = require("express")();
 const https = require("https");
 const fs = require("fs");
 const tls = require("tls");
-const env = require("dotenv").config();
+const env = require("dotenv").config().parsed;
 
 const soundEnglishEnv = require("dotenv").config({
   path: "./environment/sound-english-client.env",
-});
+}).parsed;
 
 const authEnv = require("dotenv").config({
   path: "./environment/authorization-client.env",
-});
+}).parsed;
 
 const certs = {
   [env.SOUND_ENGLISH_DOMAIN]: {
