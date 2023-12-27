@@ -6,11 +6,11 @@ const tls = require("tls");
 const env = require("dotenv").config();
 
 const soundEnglishEnv = require("dotenv").config({
-  path: "../deploy/environment/sound-english-client.env",
+  path: "./environment/sound-english-client.env",
 });
 
 const authEnv = require("dotenv").config({
-  path: "../deploy/environment/authorization-client.env",
+  path: "./environment/authorization-client.env",
 });
 
 const certs = {
