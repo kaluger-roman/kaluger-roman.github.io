@@ -1,0 +1,17 @@
+version: "0.1.0"
+
+name: kaluger-projects-server
+services:
+  authorization-client:
+    env_file:
+      - .env
+    build:
+      context: .
+    volumes:
+      - /etc/letsencrypt/live:/app/certificates
+    ports:
+      - 80:80
+      - 443:443
+
+volumes:
+  certificates:
