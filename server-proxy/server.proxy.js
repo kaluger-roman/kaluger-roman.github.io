@@ -49,6 +49,16 @@ const options = {
   },
 };
 
+app.enable("trust proxy");
+
+app.use((req, res, next) => {
+  if (rec.secure) {
+    next();
+  } else {
+    res.redirect("https://" + req.hostname + req.url);
+  }
+});
+
 app.use(
   proxy((req) => {
     const withPath = (host) => `${host}/${req.path}`;
