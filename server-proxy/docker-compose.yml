@@ -2,7 +2,7 @@ version: "0.1.0"
 
 name: kaluger-projects-server
 services:
-  authorization-client:
+  server-proxy:
     env_file:
       - .env
     build:
