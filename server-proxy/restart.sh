@@ -1,2 +1,2 @@
 ln -s /etc/letsencrypt/live ./certificates
-docker compose up
+docker compose up --build
