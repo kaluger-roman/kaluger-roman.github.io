@@ -7,3 +7,4 @@ RUN npm ci
 CMD node /app/server.proxy.js
 
 EXPOSE 80
+EXPOSE 443
