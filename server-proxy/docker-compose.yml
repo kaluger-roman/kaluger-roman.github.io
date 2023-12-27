@@ -9,6 +9,7 @@ services:
       context: .
     volumes:
       - /etc/letsencrypt/live:/app/certificates
+      - ../deploy/environment:/app/environment
     ports:
       - 80:80
       - 443:443
