@@ -1,3 +1,3 @@
 rm -rf ./certificates
-cp -arf /etc/letsencrypt/live/. ./certificates
+cp -arfL /etc/letsencrypt/live/. ./certificates
 docker compose up --build
