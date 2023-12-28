@@ -32,42 +32,42 @@ const certs = {
   },
 };
 
-// const getSecureContexts = (certs) => {
-//   const certsToReturn = {};
-//   for (const serverName of Object.keys(certs)) {
-//     certsToReturn[serverName] = tls.createSecureContext({
-//       key: fs.readFileSync(certs[serverName].key),
-//       cert: fs.readFileSync(certs[serverName].cert),
-//     });
-//   }
-//   return certsToReturn;
-// };
+const getSecureContexts = (certs) => {
+  const certsToReturn = {};
+  for (const serverName of Object.keys(certs)) {
+    certsToReturn[serverName] = tls.createSecureContext({
+      key: fs.readFileSync(certs[serverName].key),
+      cert: fs.readFileSync(certs[serverName].cert),
+    });
+  }
+  return certsToReturn;
+};
 
-// const secureContexts = getSecureContexts(certs);
+const secureContexts = getSecureContexts(certs);
 
-// const options = {
-//   SNICallback: (servername, cb) => {
-//     const ctx = secureContexts[servername];
+const options = {
+  SNICallback: (servername, cb) => {
+    const ctx = secureContexts[servername];
 
-//     if (cb) {
-//       cb(null, ctx);
-//     } else {
-//       return ctx;
-//     }
-//   },
-// };
+    if (cb) {
+      cb(null, ctx);
+    } else {
+      return ctx;
+    }
+  },
+};
 
-// app.enable("trust proxy");
+app.enable("trust proxy");
 
-// app.use(require("express").static("public"));
+app.use(require("express").static("public"));
 
-// app.use((req, res, next) => {
-//   if (req.secure) {
-//     next();
-//   } else {
-//     res.redirect("https://" + req.hostname + req.url);
-//   }
-// });
+app.use((req, res, next) => {
+  if (req.secure) {
+    next();
+  } else {
+    res.redirect("https://" + req.hostname + req.url);
+  }
+});
 
 app.use(
   createProxyMiddleware({
@@ -78,11 +78,10 @@ app.use(
       [env.SOUND_ENGLISH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
       [env.SOUND_ENGLISH_AUTH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${authEnv.PORT}`,
     },
-    logLevel: "debug",
     ws: true,
   })
 );
 
-// https.createServer(options, app).listen(443);
+https.createServer(options, app).listen(443);
 
 app.listen(80);
