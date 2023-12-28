@@ -9,7 +9,15 @@ const soundEnglishEnv = require("dotenv").config({
   path: "./environment/sound-english-client.env",
 }).parsed;
 
+const soundEnglishServerEnv = require("dotenv").config({
+  path: "./environment/sound-english-server.env",
+}).parsed;
+
 const authEnv = require("dotenv").config({
+  path: "./environment/authorization-client.env",
+}).parsed;
+
+const authServerEnv = require("dotenv").config({
   path: "./environment/authorization-client.env",
 }).parsed;
 
@@ -65,12 +73,13 @@ app.use(
   createProxyMiddleware({
     target: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
     router: {
+      [`${SOUND_ENGLISH_DOMAIN}/api`]: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishServerEnv.SERVER_PORT}`,
+      [`${SOUND_ENGLISH_AUTH_DOMAIN}/api`]: `http://${env.SERVER_LOCAL_STATIC_IP}:${authServerEnv.SERVER_PORT}`,
       [env.SOUND_ENGLISH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
       [env.SOUND_ENGLISH_AUTH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${authEnv.PORT}`,
     },
     logLevel: "debug",
     ws: true,
-    // secure: true,
   })
 );
 
