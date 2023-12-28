@@ -18,7 +18,7 @@ const authEnv = require("dotenv").config({
 }).parsed;
 
 const authServerEnv = require("dotenv").config({
-  path: "./environment/authorization-client.env",
+  path: "./environment/authorization-server.env",
 }).parsed;
 
 const certs = {
