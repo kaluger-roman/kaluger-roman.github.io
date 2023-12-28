@@ -1,4 +1,4 @@
-const proxy = require("express-http-proxy");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 const app = require("express")();
 const https = require("https");
 const fs = require("fs");
@@ -51,6 +51,8 @@ const options = {
 
 app.enable("trust proxy");
 
+app.use(express.static("public"));
+
 app.use((req, res, next) => {
   if (req.secure) {
     next();
@@ -60,16 +62,13 @@ app.use((req, res, next) => {
 });
 
 app.use(
-  proxy((req) => {
-    const withPath = (host) => `${host}/${req.path}`;
-
-    if (req.hostname === env.SOUND_ENGLISH_DOMAIN)
-      return withPath(`${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`);
-
-    if (req.hostname === env.SOUND_ENGLISH_AUTH_DOMAIN)
-      return withPath(`${env.SERVER_LOCAL_STATIC_IP}:${authEnv.PORT}`);
-
-    return "/";
+  createProxyMiddleware({
+    target: `${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
+    router: {
+      [env.SOUND_ENGLISH_DOMAIN]: `${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
+      [env.SOUND_ENGLISH_AUTH_DOMAIN]: `${env.SERVER_LOCAL_STATIC_IP}:${authEnv.PORT}`,
+    },
+    ws: true,
   })
 );
 
