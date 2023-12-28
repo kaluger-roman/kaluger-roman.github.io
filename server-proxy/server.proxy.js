@@ -69,19 +69,23 @@ app.use((req, res, next) => {
   }
 });
 
-app.use(
-  createProxyMiddleware({
-    target: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
-    router: {
-      [`${env.SOUND_ENGLISH_DOMAIN}/api`]: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishServerEnv.SERVER_PORT}`,
-      [`${env.SOUND_ENGLISH_AUTH_DOMAIN}/api`]: `http://${env.SERVER_LOCAL_STATIC_IP}:${authServerEnv.SERVER_PORT}`,
-      [env.SOUND_ENGLISH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
-      [env.SOUND_ENGLISH_AUTH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${authEnv.PORT}`,
-    },
-    ws: true,
-  })
-);
+const wsProxy = createProxyMiddleware({
+  target: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
+  router: {
+    [`${env.SOUND_ENGLISH_DOMAIN}/api`]: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishServerEnv.SERVER_PORT}`,
+    [`${env.SOUND_ENGLISH_AUTH_DOMAIN}/api`]: `http://${env.SERVER_LOCAL_STATIC_IP}:${authServerEnv.SERVER_PORT}`,
+    [env.SOUND_ENGLISH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
+    [env.SOUND_ENGLISH_AUTH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${authEnv.PORT}`,
+  },
+  ws: true,
+});
 
-https.createServer(options, app).listen(443);
+app.use(wsProxy);
+
+const httpsServer = https.createServer(options, app);
+
+httpsServer.on("upgrade", wsProxy.upgrade);
+
+httpsServer.listen(443);
 
 app.listen(80);
