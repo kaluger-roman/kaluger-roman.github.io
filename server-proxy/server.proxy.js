@@ -63,10 +63,10 @@ app.use((req, res, next) => {
 
 app.use(
   createProxyMiddleware({
-    target: `${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
+    target: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
     router: {
-      [env.SOUND_ENGLISH_DOMAIN]: `${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
-      [env.SOUND_ENGLISH_AUTH_DOMAIN]: `${env.SERVER_LOCAL_STATIC_IP}:${authEnv.PORT}`,
+      [env.SOUND_ENGLISH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
+      [env.SOUND_ENGLISH_AUTH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${authEnv.PORT}`,
     },
     ws: true,
   })
