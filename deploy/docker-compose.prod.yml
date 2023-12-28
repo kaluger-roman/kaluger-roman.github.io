@@ -9,7 +9,7 @@ services:
       context:  https://github.com/kaluger-roman/authorization-client.git
       dockerfile: Dockerfile.prod
       args: 
-        - REACT_APP_SERVER_HOST=wss://${REACT_APP_AUTH_HOST}/api
+        - REACT_APP_SERVER_HOST=wss://${AUTH_HOST}/api
     ports:
       - 3021:3000
     depends_on:
