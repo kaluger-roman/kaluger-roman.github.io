@@ -9,7 +9,7 @@ services:
       context:  https://github.com/kaluger-roman/authorization-client.git
       dockerfile: Dockerfile.prod
       args: 
-        - REACT_APP_SERVER_HOST=ws://${HOST}:3022/api
+        - REACT_APP_SERVER_HOST=wss://${HOST}/api
     ports:
       - 3021:3000
     depends_on:
@@ -51,8 +51,8 @@ services:
       context: https://github.com/kaluger-roman/sound-english-client.git
       dockerfile: Dockerfile.prod
       args: 
-        - REACT_APP_SERVER_HOST=ws://${HOST}:3025/api
-        - REACT_APP_AUTH_HOST=http://${HOST}:3021
+        - REACT_APP_SERVER_HOST=wss://${HOST}/api
+        - REACT_APP_AUTH_HOST=https://${HOST}
     ports:
       - 3024:3000
     depends_on:
