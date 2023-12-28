@@ -51,7 +51,7 @@ const options = {
 
 app.enable("trust proxy");
 
-app.use(express.static("public"));
+app.use(require("express").static("public"));
 
 app.use((req, res, next) => {
   if (req.secure) {
