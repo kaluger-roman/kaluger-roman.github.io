@@ -52,7 +52,7 @@ services:
       dockerfile: Dockerfile.prod
       args: 
         - REACT_APP_SERVER_HOST=wss://${HOST}/api
-        - REACT_APP_AUTH_HOST=https://${HOST}
+        - REACT_APP_AUTH_HOST=https://${AUTH_HOST}
     ports:
       - 3024:3000
     depends_on:
