@@ -77,17 +77,12 @@ const wsProxy = createProxyMiddleware({
     [env.SOUND_ENGLISH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
     [env.SOUND_ENGLISH_AUTH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${authEnv.PORT}`,
   },
-  ws: false,
-  changeOrigin: false,
-  //   secure: true,
-  logLevel: "debug",
+  ws: true,
 });
 
 app.use(wsProxy);
 
 const httpsServer = https.createServer(options, app);
-
-httpsServer.on("upgrade", wsProxy.upgrade);
 
 httpsServer.listen(443);
 
