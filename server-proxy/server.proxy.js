@@ -77,9 +77,9 @@ const wsProxy = createProxyMiddleware({
     [env.SOUND_ENGLISH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
     [env.SOUND_ENGLISH_AUTH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${authEnv.PORT}`,
   },
-  ws: true,
-  changeOrigin: true,
-  secure: true,
+  ws: false,
+  changeOrigin: false,
+  //   secure: true,
   logLevel: "debug",
 });
 
