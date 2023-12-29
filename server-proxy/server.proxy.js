@@ -80,6 +80,7 @@ const wsProxy = createProxyMiddleware({
   ws: true,
   changeOrigin: true,
   secure: true,
+  logLevel: "debug",
 });
 
 app.use(wsProxy);
