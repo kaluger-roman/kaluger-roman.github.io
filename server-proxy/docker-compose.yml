@@ -9,6 +9,7 @@ services:
       context: .
     volumes:
       - ../deploy/environment:/app/environment
+      - ./public:/app/public
     ports:
       - 80:80
       - 443:443
