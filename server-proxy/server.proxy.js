@@ -35,10 +35,15 @@ const certs = {
 const getSecureContexts = (certs) => {
   const certsToReturn = {};
   for (const serverName of Object.keys(certs)) {
-    certsToReturn[serverName] = tls.createSecureContext({
-      key: fs.readFileSync(certs[serverName].key),
-      cert: fs.readFileSync(certs[serverName].cert),
-    });
+    if (
+      fs.existsSync(certs[serverName].key) &&
+      fs.existsSync(certs[serverName].cert)
+    ) {
+      certsToReturn[serverName] = tls.createSecureContext({
+        key: fs.readFileSync(certs[serverName].key),
+        cert: fs.readFileSync(certs[serverName].cert),
+      });
+    }
   }
   return certsToReturn;
 };
