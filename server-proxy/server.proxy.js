@@ -79,6 +79,7 @@ const wsProxy = createProxyMiddleware({
   },
   ws: true,
   changeOrigin: true,
+  secure: true,
 });
 
 app.use(wsProxy);
