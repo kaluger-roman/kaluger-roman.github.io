@@ -62,7 +62,7 @@ app.enable("trust proxy");
 app.use(require("express").static("public"));
 
 app.use((req, res, next) => {
-  if (req.secure) {
+  if (req.secure || req.path.includes("/.well-known/acme-challenge")) {
     next();
   } else {
     res.redirect("https://" + req.hostname + req.url);
