@@ -91,19 +91,12 @@ services:
     networks:
       - kaluger-projects-prod
 
-  text-to-speech-english:
-    image: synesthesiam/opentts:en
+  text-to-speech:
+    image: aculeasis/rhvoice-rest
     ports:
-      - 3027:5500
+      - 3027:8080
     networks:
-      - kaluger-projects-prod
-
-  text-to-speech-russian:
-    image: synesthesiam/opentts:ru
-    ports:
-      - 3028:5500
-    networks:
-      - kaluger-projects-prod
+      - kaluger-projects
   
   ffmpeg-server:
     env_file:
