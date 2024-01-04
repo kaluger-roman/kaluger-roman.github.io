@@ -96,7 +96,7 @@ services:
     ports:
       - 3027:8080
     networks:
-      - kaluger-projects
+      - kaluger-projects-prod
   
   ffmpeg-server:
     env_file:
