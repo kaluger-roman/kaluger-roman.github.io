@@ -97,6 +97,13 @@ services:
       - 3027:8080
     networks:
       - kaluger-projects-prod
+
+  translate:
+    image: libretranslate/libretranslate
+    ports:
+      - 3028:5000
+    networks:
+      - kaluger-projects
   
   ffmpeg-server:
     env_file:
