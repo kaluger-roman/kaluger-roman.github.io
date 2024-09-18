@@ -15,5 +15,3 @@
 
 - git push
 - docker compose up
-
-ngrok http 80 --authtoken 1uf3T4yQYchPREb0oG99M4JxbO0_6a5ZZZLe66Kjd7uoLBBiL ;
