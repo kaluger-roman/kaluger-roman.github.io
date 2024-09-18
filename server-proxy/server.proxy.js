@@ -70,7 +70,10 @@ app.use((req, res, next) => {
   if (req.secure || req.path.includes("/.well-known/acme-challenge")) {
     next();
   } else {
-    res.redirect("https://" + req.hostname + req.url);
+    // res.redirect("https://" + req.hostname + req.url);
+    // commented untill ssl for domain
+
+    next(); // mock
   }
 });
 

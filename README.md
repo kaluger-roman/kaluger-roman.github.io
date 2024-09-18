@@ -4,6 +4,7 @@
 - ngrok http 3030 --authtoken TOKEN
 - токен лежит тут в .env
 - Подставить урл в index.html src iframe <url>/sound-english-client
+  и вставить урл во все енвы в сервер прокси
 - В environment папке
 
 curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url'
