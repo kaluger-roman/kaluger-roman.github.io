@@ -7,6 +7,8 @@
   и вставить урл во все енвы в сервер прокси
 - В environment папке
 
+/domain-auth путь везде вместо другого домена для авторизации
+
 curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url'
 
 - для authorization-сlient
