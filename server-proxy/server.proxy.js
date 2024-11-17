@@ -70,10 +70,7 @@ app.use((req, res, next) => {
   if (req.secure || req.path.includes("/.well-known/acme-challenge")) {
     next();
   } else {
-    // res.redirect("https://" + req.hostname + req.url);
-    // commented untill ssl for domain
-
-    next(); // mock
+    res.redirect("https://" + req.hostname + req.url);
   }
 });
 
@@ -87,9 +84,7 @@ const wsProxy = createProxyMiddleware(
       [env.SOUND_ENGLISH_AUTH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${authEnv.PORT}`,
       [env.SOUND_ENGLISH_DOMAIN]: `http://${env.SERVER_LOCAL_STATIC_IP}:${soundEnglishEnv.PORT}`,
     },
-    pathRewrite: (path) => path.replace("/domain-auth", ""),
     ws: true,
-    logLevel: "debug",
   }
 );
 

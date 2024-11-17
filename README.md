@@ -1,4 +1,4 @@
-Для деплоя
+<!-- Для деплоя
 
 - Установить docker, ngrok
 - ngrok http 3030 --authtoken TOKEN
@@ -19,4 +19,4 @@ curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url'
   REACT_APP_SERVER_HOST=wss://<url>/sound-english-server
 
 - git push
-- docker compose up
+- docker compose up -->
